@@ -1,0 +1,115 @@
+        ____  ____  _____   ______                   
+       |    ||    ||\    \ |\     \  _____      _____
+       |    ||    | \\    \| \     \ \    \    /    /
+       |    ||    |  \|    \  \     | \    \  /    / 
+ ____  |    ||    |   |     \  |    |  \____\/____/  
+|    | |    ||    |   |      \ |    |  /    /\    \  
+|    | |    ||    |   |    |\ \|    | /    /  \    \ 
+|\____\|____||____|   |____||\_____/|/____/ /\ \____\
+| |    |    ||    |   |    |/ \|   |||    |/  \|    |
+ \|____|____||____|   |____|   |___|/|____|    |____|
+                                                     
+
+Jinx is framework for deploying and managing exploits in bitburner.
+
+Fundamentally, it is just a standardized interface for exploit elements to
+interact (but not communicate) with eachother
+
+It is a simplistic system. There is no interprocess communication for example.
+
+It exists to function as a baseline for exploits and tools, and it is designed
+to be easily included in other more involved frameworks that I may develop in
+the future(tm).
+
+
+
+Standards:
+
+main() is the entry point for any exploit. main will only take "ns" as an
+argument in code. Everything else shall be passed in via CLI arguments.
+
+main() will exit with 0 on success and 1 on failure. It is up to the developer
+to decide what constitutes a failure. No other exit codes are defined.
+
+It is recommended that exec() or run() be used for deploying jinx scripts, however this
+is not strictly necessary, and can be diverged from if necessary.
+
+If a jinx script must be killed externally, it is to be done externally with the
+kill command. There is no SIGINT or similar.
+
+When transfering files, the structure of the jinx framework must stay intact.
+Jinx root directory must be located in "/aksu/jinx/".
+
+
+
+Payloads:
+
+A payload is a script that runs on the target machine. There are no strict
+standards on what a payload is and how it should behave, as long as it sticks
+to the defined interface.
+
+Payloads are to be stored under "aksu/jinx/payloads/"
+
+A payload will take a single object
+
+A payloads main() MUST be in a file in the root directory, named the same as
+the payload. Eg. "aksu/jinx/payloads/foo/foo.js:main()"
+
+This directory should contain a directory for each payload separately. No loose
+scripts.
+
+With the exception of lib.js (see below), ALL files for a payload MUST be stored
+within its own directory. This is to facilitate ease of filetransfer via scp.
+This way, if you transfer the payload directory, and lib.js, you know your
+script WILL run. This means that there are no external dependencies allowed.
+Either copy paste the function, or if the functionality is widely applicable,
+add it to lib.js.
+
+A reference payload, roughly similar to Hello World, can be found from
+payloads/ping/
+
+
+
+Tools:
+
+A tool is any jinx script that is NOT a payload.
+
+Tools shall never be deployed to targeted machines.
+
+Tools are to be stored under "aksu/jinx/tools/"
+
+Unlike payloads, tools MAY have external dependecies, however they CANNOT have
+dependecies external to jinx as a whole. This effectively means they can depend
+on payloads, other tools and lib.js but nothing else.
+
+A tools main() MUST be in a file in the root directory, named the same as the
+tool. Eg. "aksu/jinx/tools/bar/bar.js:main()"
+
+Tools have no defined exit values, but don't be a shitter about it.
+
+
+
+lib.js:
+
+lib.js is a shared library file stored in the jinxs root directory
+("aksu/jinx/lib.js").
+
+lib.js exists to share behaviour common in jinx scripts.
+
+lib.js may be extended.
+
+Functions in lib.js CAN be deprecated, but may never be removed. This is to
+guarantee backwards compatability with payloads, no matter how ancient.
+Deprecation warnings may be added, but the function must still behave as
+expected.
+
+lib.js MUST be deployed alongside every jinx script. This includes payloads,
+auxiliary tools etc.
+
+It is the responsibility of the DEPLOYER to make sure that lib.js is present.
+Scripts must be able to blindly assume the file is located in
+"aksu/jinx/lib.js", without having to check, or pull it from an external source.
+
+
+
+- aksu 2024
