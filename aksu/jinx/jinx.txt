@@ -87,6 +87,9 @@ tool. Eg. "aksu/jinx/tools/bar/bar.js:main()"
 
 Tools have no defined exit values, but don't be a shitter about it.
 
+A reference tool, needle, can be found from "tools/needle/". It can be used to
+deploy payloads to servers directly. To try it out, execute:
+"run aksu/jinx/tools/needle/needle.js --target n00dles --payload ping"
 
 
 lib.js:
