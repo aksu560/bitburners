@@ -14,7 +14,7 @@ export async function main(ns) {
         return 1;
     }
     
-    const payload_files = ns.ls(ns.getHostname(), flags['payload']);
+    const payload_files = ns.ls(ns.getHostname(), 'aksu/jinx/payloads/' + flags['payload']);
     const main_file = 'aksu/jinx/payloads/' + flags['payload'] + '/' + flags['payload'] + '.js';
     const payload_args = flags['payload-args'];
     const threads = flags['threads'];
