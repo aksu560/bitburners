@@ -10,7 +10,7 @@
 
 
 // Now that being said, I will still put dogshit here :)
-export function parsePayloadArg(args) {
+export function parsePayloadArgs(args) {
     let data = {};
     if (args.length == 0) {
         return data;
