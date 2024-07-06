@@ -11,10 +11,5 @@
 
 // Now that being said, I will still put dogshit here :)
 export function parsePayloadArgs(args) {
-    let data = {};
-    if (args.length == 0) {
-        return data;
-    }
-    eval('data = ' + args.join());
-    return data;
+    return JSON.parse(args.join());
 }

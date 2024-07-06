@@ -1,11 +1,7 @@
 import { parsePayloadArgs } from "../../lib";
 
 export async function main(ns) {
-    let args = ''
-    if (ns.args.length > 0) {
-        args = ns.args
-    }
-    let data = parsePayloadArgs(args)
+    let data = parsePayloadArgs(ns.args)
     if (!data) {
         data = {};
     }
