@@ -6,7 +6,6 @@ export async function main(ns) {
         args = ns.args
     }
     let data = parsePayloadArg(args)
-    ns.tprint(data);
     if (!data) {
         data = {};
     }

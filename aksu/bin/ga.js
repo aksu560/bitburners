@@ -1,5 +1,6 @@
 export function main(ns) {
-    const programs = ns.ls(ns.getHostname(), "aksu/bin/");
+    const bin = ns.ls(ns.getHostname(), "aksu/bin/");
+    const jinx_tools = ns.ls(ns.getHostname(), "aksu/jinx/tools");
     
     let out_string =`        
  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ████████╗███████╗██████╗      █████╗ ██╗     ██╗ █████╗ ███████╗
@@ -10,12 +11,13 @@ export function main(ns) {
  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚══════╝
                                                                                                                    
  ` ;
-
+    const programs = bin.concat(jinx_tools);
     for (const i in programs) {
         const program = programs[i];
         const prog_name = program.split(".")[0].split("/").at(-1);
         const command = "alias -g " + prog_name + "=\"" + program + "\";";
         out_string += command
     }
+
     ns.tprint(out_string);
 }
