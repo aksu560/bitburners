@@ -3,8 +3,8 @@ export async function main(ns) {
         ['delay', 0],
         ['target', ''],
         ['payload', 'ping'],
-        ['payload-args', ''],
-        ['threads', 1]
+        ['payload-args', '{}'],
+        ['threads', 1],
     ]);
 
     ns
@@ -36,11 +36,9 @@ export async function needle(ns, target, main_file, payload_files, payload_args,
     ns.scp('aksu/jinx/lib.js', target);
 
     if (delay > 0) {
-        ns.printf('Waiting for %d seconds', delay);
-        await ns.sleep(delay * 1000);
+        await ns.sleep(delay);
     }
 
     ns.exec(main_file, target, threads, payload_args);
-    ns.print('Payload executed');
     return 0;
 }

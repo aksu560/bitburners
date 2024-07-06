@@ -55,6 +55,9 @@ A payload will take a single object
 A payloads main() MUST be in a file in the root directory, named the same as
 the payload. Eg. "aksu/jinx/payloads/foo/foo.js:main()"
 
+A payload takes a single argument, which is a json object, with all of the
+configuration necessary.
+
 This directory should contain a directory for each payload separately. No loose
 scripts.
 

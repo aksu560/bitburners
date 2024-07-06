@@ -22,7 +22,7 @@ export async function main(ns) {
  
  
  
- async function plexer(ns, main_file, payload_files, payload_args, delay, max_dep, dep, server_name, visited, exclude) {
+ export async function plexer(ns, main_file, payload_files, payload_args, delay, max_dep, dep, server_name, visited, exclude) {
     visited.push(server_name);
 
     const unvisited = ns.scan(server_name).filter(n => !visited.includes(n));
@@ -30,7 +30,7 @@ export async function main(ns) {
     args.target = server_name;
 
     if (! exclude.includes(server_name)) {
-        await ns.run(main_file, 1, JSON.stringify(args));
+        ns.run(main_file, 1, JSON.stringify(args));
     }
 
     if (unvisited.length == 0 || max_dep == dep) {
@@ -40,5 +40,5 @@ export async function main(ns) {
     for (const server in unvisited) {
         await ns.sleep(delay);
         await plexer(ns, main_file, payload_files, payload_args, delay, max_dep, dep + 1, unvisited[server], visited, exclude);
-}
+    }
  }
