@@ -1,3 +1,5 @@
+import { needle } from "../needle/needle";
+
 export async function main(ns) {
    const flags = ns.flags([
         ['payload', 'ping'],
@@ -23,11 +25,8 @@ export async function crawler(ns, main_file, payload_files, payload_args, max_de
 
     const unvisited = ns.scan(server_name).filter(n => !visited.includes(n));
 
-    ns.scp(payload_files, server_name);
-    ns.scp('aksu/jinx/lib.js', server_name);
-
     if (!exclude.includes(server_name)) {
-        ns.exec(main_file, server_name, 1, payload_args);
+        await needle(ns, server_name, main_file, payload_files, payload_args, 1, delay);
     }
 
     if (unvisited.length == 0 || max_dep == dep) {
@@ -35,7 +34,6 @@ export async function crawler(ns, main_file, payload_files, payload_args, max_de
     }
     
     for (const server in unvisited) {
-        await ns.sleep(delay);
         await crawler(ns, main_file, payload_files, payload_args, max_dep, dep + 1, unvisited[server], visited, delay, exclude);
     }
 }

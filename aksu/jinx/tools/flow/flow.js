@@ -43,7 +43,7 @@ export async function main(ns) {
             }
         }
         if (type == "plexer") {
-            await plexer(ns, main_file, payload_files, args, delay, max_dep, 0, host, [], exclude)
+            await plexer(ns, host, main_file, payload_files, args, delay, max_dep, 0, host, [], exclude)
         }
         if (type == "crawler") {
             await crawler(ns, main_file, payload_files, args, max_dep, 0, host, [], delay, exclude)
