@@ -35,11 +35,7 @@ export async function crawler(ns, main_file, payload_files, payload_args, thread
         let local_threads = threads;
 
         if (threads == 'auto') {
-            
             local_threads = Math.floor(ns.getServerMaxRam(server_name) / ns.getScriptRam(main_file));
-            ns.print(server_name)
-            ns.print('- ' + ns.getServerMaxRam(server_name) + 'GB')
-            ns.printf('%d times %d threads = %dGB', ns.getScriptRam(main_file), local_threads, ns.getScriptRam(main_file) * local_threads)
         }
 
         if (local_threads > 0) {
