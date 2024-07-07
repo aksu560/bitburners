@@ -13,7 +13,7 @@ export async function main(ns) {
 
     for (const index in config) {
         if (config[index].skip) {
-            ns.print("Skipping phase " + index);
+            ns.print("Skipping step " + index);
             continue;
         }
         ns.print("Step " + index);
@@ -47,5 +47,7 @@ export async function main(ns) {
             await crawler(ns, main_file, payload_files, args, threads, max_dep, 0, host, [], delay, exclude)
         }
     }
+
+    ns.toast("Flow command successful!");
 
 }

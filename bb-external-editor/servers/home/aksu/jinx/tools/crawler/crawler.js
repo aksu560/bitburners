@@ -23,18 +23,28 @@ export async function main(ns) {
 
 
 export async function crawler(ns, main_file, payload_files, payload_args, threads, max_dep, dep, server_name, visited, delay, exclude) {
+    ns.disableLog('disableLog');
+    ns.disableLog('scan');
+    ns.disableLog('getServerMaxRam');
     visited.push(server_name);
 
     const unvisited = ns.scan(server_name).filter(n => !visited.includes(n));
 
     if (!exclude.includes(server_name)) {
 
+        let local_threads = threads;
+
         if (threads == 'auto') {
-            const freeRAM = ns.getServerMaxRam(server_name) - ns.getServerUsedRam(server_name);
-            threads = Math.floor(freeRAM / ns.getScriptRam(main_file));
+            
+            local_threads = Math.floor(ns.getServerMaxRam(server_name) / ns.getScriptRam(main_file));
+            ns.print(server_name)
+            ns.print('- ' + ns.getServerMaxRam(server_name) + 'GB')
+            ns.printf('%d times %d threads = %dGB', ns.getScriptRam(main_file), local_threads, ns.getScriptRam(main_file) * local_threads)
         }
 
-        await needle(ns, server_name, main_file, payload_files, payload_args, threads, delay);
+        if (local_threads > 0) {
+            await needle(ns, server_name, main_file, payload_files, payload_args, local_threads, delay);
+        }
     }
 
     if (unvisited.length == 0 || max_dep == dep) {

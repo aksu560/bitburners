@@ -31,6 +31,9 @@ export async function main(ns) {
 }
 
 export async function needle(ns, target, main_file, payload_files, payload_args, threads, delay) {
+    ns.disableLog('disableLog');
+    ns.disableLog('scp');
+    ns.disableLog('sleep');
     ns.scp(payload_files, target);
 
     ns.scp('aksu/jinx/lib.js', target);
