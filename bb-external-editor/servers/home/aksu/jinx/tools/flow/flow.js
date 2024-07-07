@@ -1,17 +1,15 @@
 import { crawler } from "../crawler/crawler";
 import { needle } from "../needle/needle";
 import { plexer } from "../plexer/plexer";
+import { parseConfig } from "./config-parse";
 
 export async function main(ns) {
-    const flags = ns.flags([
-        ['file', ''],
-    ]);
+    
+    const config = parseConfig(ns);
 
-    if (!flags['file']) {
-        ns.tprint("Please provide a flow file");
-        return 1;
+    if (!config) {
+        return;
     }
-    const config = JSON.parse(ns.read(flags['file']));
 
     for (const index in config) {
         if (config[index].skip) {
@@ -46,7 +44,7 @@ export async function main(ns) {
             await plexer(ns, host, main_file, payload_files, args, delay, max_dep, 0, host, [], exclude)
         }
         if (type == "crawler") {
-            await crawler(ns, main_file, payload_files, args, max_dep, 0, host, [], delay, exclude)
+            await crawler(ns, main_file, payload_files, args, threads, max_dep, 0, host, [], delay, exclude)
         }
     }
 
