@@ -18,7 +18,7 @@ export const config = {
       "args": {"target": "phantasy"},
       "threads": "auto",
       "delay": 100,
-      "exclude": ['home'],
+      "exclude": [],
       'max-depth': -1
     },
 };

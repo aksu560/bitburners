@@ -39,7 +39,7 @@ async function crawler(ns, main_file, payload_files, payload_args, threads, max_
   if (!exclude.includes(server_name)) {
     let local_threads = threads;
     if (threads == "auto") {
-      local_threads = Math.floor(ns.getServerMaxRam(server_name) / ns.getScriptRam(main_file));
+      local_threads = Math.floor((ns.getServerMaxRam(server_name) - ns.getServerUsedRam(server_name)) / ns.getScriptRam(main_file));
     }
     if (local_threads > 0) {
       execs.push(await needle(ns, server_name, main_file, payload_files, payload_args, local_threads, delay));
