@@ -43,7 +43,9 @@ export function xsinx(ns) {
 }
 
 export function calculate_xsinx(ns, host) {
-    return ns.getServerMaxMoney(host) / ns.getServerMinSecurityLevel(host)
+    // Divide by 10000 to make it a little less insane of a number for display purposes.
+    return Math.floor(ns.getServerMaxMoney(host) / ns.getServerMinSecurityLevel(host) / 10000) 
+    
 }
 
 export function bfs(ns, start) {
@@ -66,4 +68,55 @@ export function bfs(ns, start) {
         parentByIndex: parentByIndex,
         routes: routes
     };
+}
+
+export function getExtendedServerData(ns) {
+    const scan = bfs(ns, 'home');
+    return scan.servers.map((server, index) => {
+        return {
+            name: server,
+            used_ram: ns.getServerUsedRam(server),
+            max_ram: ns.getServerMaxRam(server),
+            base_security: ns.getServerBaseSecurityLevel(server),
+            min_security: ns.getServerMinSecurityLevel(server),
+            curr_money: ns.getServerMoneyAvailable(server),
+            max_money: ns.getServerMaxMoney(server),
+            xsinx: calculate_xsinx(ns, server),
+            req_ports: ns.getServerNumPortsRequired(server),
+            hack_level: ns.getServerRequiredHackingLevel(server),
+            ps: ns.ps(server),
+            threads: ns.ps(server).reduce((a, b) => a + b.threads, 0),
+            connections: ns.scan(server),
+            route: scan.routes[server].split(";connect "),
+            parent: scan.parentByIndex[index]
+        }
+    });
+}
+
+export const ansi = {
+    r: "\x1b[31m", // red
+    g: "\x1b[32m", // green
+    b: "\x1b[34m", // blue
+    c: "\x1b[36m", // cyan
+    m: "\x1b[35m", // Magenta
+    y: "\x1b[33m", // Yellow
+    k: "\x1b[30m", // key(black)
+    w: "\x1b[37m", // white
+    d: "\x1b[0m",  // default
+    bl: "\x1b[2m", // bold
+}
+
+export function centerString(str, size) {
+    if (str.len < size) {
+        throw new Error("Tried to center a string in a space too small!");
+    }
+    const empty = size - str.length
+    const frt = Math.floor(empty / 2);
+    const aft = empty - frt;
+    
+    return " ".repeat(frt) + str + " ".repeat(aft);
+}
+
+export function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
