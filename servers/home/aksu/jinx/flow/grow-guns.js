@@ -10,15 +10,15 @@ export const config = {
         'max-depth': -1,
         'exclude': ['home']
     },
-    "2": {
+    "1": {
         "skip": false,
         "type": "crawler",
         "host": "home",
-        "payload": "mcafee",
-        "args": { "target": "harakiri-sushi" },
+        "payload": "fertilizer",
+        "args": { "target": "joesguns" },
         "threads": "auto",
         "delay": 100,
-        "exclude": ['home'],
+        "exclude": [],
         'max-depth': -1
     }
 };

@@ -1,5 +1,8 @@
 import { needle } from "../needle/needle";
 
+// How much free ram to keep on each server.
+const FREE_RAM = {'home': 10 };
+
 export async function main(ns) {
    const flags = ns.flags([
         ['payload', 'ping'],
@@ -35,7 +38,13 @@ export async function crawler(ns, main_file, payload_files, payload_args, thread
         let local_threads = threads;
 
         if (threads == 'auto') {
-            local_threads = Math.floor((ns.getServerMaxRam(server_name) - ns.getServerUsedRam(server_name)) / ns.getScriptRam(main_file));
+            let ram_offset = 0;
+
+            if (Object.keys(FREE_RAM).includes(server_name)){
+                ram_offset = FREE_RAM[server_name]
+            }
+
+            local_threads = Math.floor((ns.getServerMaxRam(server_name) - ns.getServerUsedRam(server_name) - ram_offset) / ns.getScriptRam(main_file));
         }
 
         if (local_threads > 0) {

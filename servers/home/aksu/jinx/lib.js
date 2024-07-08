@@ -14,10 +14,29 @@ export function parsePayloadArgs(args) {
     return JSON.parse(args.join());
 }
 
+export function howManyPortsCanOpen(ns) {
+    let port_count = 0;
+    const programs = [
+        'BruteSSH.exe',
+        'FTPCrack.exe',
+        'relaySMTP.exe',
+        'HTTPWorm.exe',
+        'SQLInject.exe'
+    ]
+
+    for (const program of programs) {
+        const res = ns.ls('home', program).filter(n => ! n.includes("%"))
+        if (res.length > 0) {
+            port_count ++;
+        }
+    }
+    return port_count;
+}
+
 export function xsinx(ns) {
     return bfs(ns).servers
   .filter(n => !ns.getPurchasedServers().includes(n))
-  .filter(x => ns.getServerRequiredHackingLevel(x) < ns.getHackingLevel() * 0.5)
+  .filter(x => ns.getServerRequiredHackingLevel(x) < ns.getHackingLevel() * 0.5 && ns.getServerNumPortsRequired(x) <= howManyPortsCanOpen(ns))
   .map(x => [calculate_xsinx(ns, x), x])
   .reduce((a, b) => a[0] > b[0] ? a : b)
   [1]

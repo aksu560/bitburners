@@ -9,7 +9,7 @@ export const config = {
         "delay": 100
     },
     "1": {
-        "skip": true,
+        "skip": false,
         "type": "plexer",
         "host": "home",
         "payload": "ping",

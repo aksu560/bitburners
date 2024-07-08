@@ -1,4 +1,4 @@
-import { parsePayloadArgs } from "../../lib";
+import { howManyPortsCanOpen, parsePayloadArgs } from "../../lib";
 
 export async function main(ns) {
     let args = ''
@@ -6,34 +6,13 @@ export async function main(ns) {
         args = ns.args
     }
     let data = parsePayloadArgs(args);
-    let port_count = 0;
+    try { ns.brutessh(data.target); } catch {}
+    try { ns.httpworm(data.target); } catch {}
+    try { ns.relaysmtp(data.target); } catch {}
+    try { ns.sqlinject(data.target); } catch {}
+    try { ns.ftpcrack(data.target); } catch {}
 
-    if (ns.ls('home', 'BruteSSH.exe').length > 0) {
-        port_count ++;
-        ns.brutessh(data.target);
-    }
-
-    if (ns.ls('home', 'FTPCrack.exe').length > 0) {
-        port_count ++;
-        ns.ftpcrack(data.target);
-    }
-
-    if (ns.ls('home', 'relaySMTP.exe').length > 0) {
-        port_count ++;
-        ns.httpworm(data.target);
-    }
-
-    if (ns.ls('home', 'HTTPWorm.exe').length > 0) {
-        port_count ++;
-        ns.relaysmtp(data.target);
-    }
-
-    if (ns.ls('home', 'SQLInject.exe').length > 0) {
-        port_count ++;
-        ns.sqlinject(data.target);
-    }
-
-    if (ns.getServerNumPortsRequired(data.target) <= port_count) {
+    if (ns.getServerNumPortsRequired(data.target) <= howManyPortsCanOpen(ns)) {
         ns.nuke(data.target);
     }
     return true;

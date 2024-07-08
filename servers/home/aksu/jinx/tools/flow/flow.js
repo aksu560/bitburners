@@ -1,3 +1,4 @@
+import { xsinx } from "../../lib";
 import { crawler } from "../crawler/crawler";
 import { needle } from "../needle/needle";
 import { plexer } from "../plexer/plexer";
@@ -5,9 +6,7 @@ import { parseArguments } from "./arg-parse";
 import { parseConfig } from "./config-parse";
 
 export async function main(ns) {
-    
     return flow(ns);
-
 }
 
 export async function flow(ns) {
@@ -16,7 +15,6 @@ export async function flow(ns) {
     if (!config) {
         return;
     }
-
     
     let last_exit;
     let variables = {};
@@ -60,10 +58,9 @@ export async function flow(ns) {
             const payload_files = ns.ls(ns.getHostname(), "aksu/jinx/payloads/" + payload);
             const main_file = 'aksu/jinx/payloads/' + payload + '/' + payload + '.js';
             const delay = phase.delay;
-            const max_dep = phase.max_depth;
             const exclude = phase.exclude;
 
-            last_exit = await plexer(ns, host, main_file, payload_files, args, delay, max_dep, 0, host, [], [], exclude)
+            last_exit = await plexer(ns, host, main_file, payload_files, args, delay, exclude)
         }
 
         if (type == "crawler") {
@@ -109,10 +106,14 @@ export async function flow(ns) {
 
         if (type == "set_var") {
             for (let variable of phase.variables) {
-                variables[variable[0]] = variable[1]
+                variables[variable[0]] = variable[1];
             }
 
-            last_exit = phase.variables
+            last_exit = phase.variables;
+        }
+
+        if (type == "xsinx") {
+            last_exit = xsinx(ns);
         }
     }
 
