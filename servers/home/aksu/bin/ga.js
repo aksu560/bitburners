@@ -2,7 +2,7 @@ export function main(ns) {
     const bin = ns.ls(ns.getHostname(), "aksu/bin/");
     const jinx_tools = ns.ls(ns.getHostname(), "aksu/jinx/tools");
     
-    let out_string =`        
+    ns.tprintf(`        
  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ████████╗███████╗██████╗      █████╗ ██╗     ██╗ █████╗ ███████╗
 ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗    ██╔══██╗██║     ██║██╔══██╗██╔════╝
 ██║  ███╗█████╗  ██╔██╗ ██║█████╗  ██████╔╝███████║   ██║   █████╗  ██║  ██║    ███████║██║     ██║███████║███████╗
@@ -10,7 +10,8 @@ export function main(ns) {
 ╚██████╔╝███████╗██║ ╚████║███████╗██║  ██║██║  ██║   ██║   ███████╗██████╔╝    ██║  ██║███████╗██║██║  ██║███████║
  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚══════╝
                                                                                                                    
- ` ;
+ `);
+    let out_string = ''
     const programs = bin.concat(jinx_tools);
     for (const i in programs) {
         const program = programs[i];
@@ -19,5 +20,13 @@ export function main(ns) {
         out_string += command
     }
 
-    ns.tprint(out_string);
+    try {
+        const terminalInput = eval('document').getElementById("terminal-input");
+        terminalInput.value = out_string;
+        const handler = Object.keys(terminalInput)[1];
+        terminalInput[handler].onChange({ target: terminalInput });
+        terminalInput[handler].onKeyDown({ key: 'Enter', preventDefault: () => null });
+    }
+    catch { }
+    return 0;
 }

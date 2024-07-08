@@ -1,10 +1,10 @@
 export const config = {
     "0": {
-      "skip": true,
+      "skip": false,
       "type": "plexer",
       "host": "home",
       "payload": "battering-ram",
-      "payload-args": {},
+      "args": {},
       "threads": 1,
       "delay": 100,
       'max-depth': -1,
@@ -15,7 +15,7 @@ export const config = {
       "type": "crawler",
       "host": "home",
       "payload": "mcafee",
-      "payload-args": {"target": "n00dles"},
+      "args": {"target": "sigma-cosmetics"},
       "threads": "auto",
       "delay": 100,
       "exclude": ['home'],

@@ -4,7 +4,7 @@ export const config = {
       "type": "plexer",
       "host": "home",
       "payload": "vanish",
-      "payload-args": {},
+      "args": {},
       "threads": 1,
       "delay": 100,
       'max-depth': -1,

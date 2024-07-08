@@ -13,5 +13,5 @@ export async function main(ns) {
     }
 
     await ns.toast(greeting + ' ' + ns.getHostname());
-    return 0;
+    return true;
 }

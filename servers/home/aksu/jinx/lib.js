@@ -15,7 +15,7 @@ export function parsePayloadArgs(args) {
 }
 
 export function xsinx(ns) {
-    const foreignServers = bfs(ns, ns.getHostname()).servers
+    const foreignServers = bfs(ns).servers
         .filter(n => !ns.getPurchasedServers().includes(n));
     
     let best_server = '';

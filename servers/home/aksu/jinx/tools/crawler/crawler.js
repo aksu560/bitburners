@@ -18,11 +18,11 @@ export async function main(ns) {
     const delay = flags['delay'];
     const threads = flags['threads']
 
-    crawler(ns, main_file, payload_files, payload_args, max_dep, 0, ns.getHostname(), [], delay, exclude)
+    crawler(ns, main_file, payload_files, payload_args, max_dep, 0, ns.getHostname(), [], [], delay, exclude)
 }
 
 
-export async function crawler(ns, main_file, payload_files, payload_args, threads, max_dep, dep, server_name, visited, delay, exclude) {
+export async function crawler(ns, main_file, payload_files, payload_args, threads, max_dep, dep, server_name, visited, execs, delay, exclude) {
     ns.disableLog('disableLog');
     ns.disableLog('scan');
     ns.disableLog('getServerMaxRam');
@@ -39,15 +39,16 @@ export async function crawler(ns, main_file, payload_files, payload_args, thread
         }
 
         if (local_threads > 0) {
-            await needle(ns, server_name, main_file, payload_files, payload_args, local_threads, delay);
+            execs.push(await needle(ns, server_name, main_file, payload_files, payload_args, local_threads, delay));
         }
     }
 
     if (unvisited.length == 0 || max_dep == dep) {
-        return;
+        return execs;
     }
     
     for (const server in unvisited) {
-        await crawler(ns, main_file, payload_files, payload_args, threads, max_dep, dep + 1, unvisited[server], visited, delay, exclude);
+        execs.concat(await crawler(ns, main_file, payload_files, payload_args, threads, max_dep, dep + 1, unvisited[server], visited, execs, delay, exclude));
     }
+    return execs;
 }

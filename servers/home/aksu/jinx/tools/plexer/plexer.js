@@ -19,24 +19,26 @@ export async function main(ns) {
     const exclude = flags['exclude'];
     const host = flags['host'];
 
-    await plexer(ns, host, main_file, payload_files, payload_args, delay, max_dep, 0, ns.getHostname(), [], exclude)
+    await plexer(ns, host, main_file, payload_files, payload_args, delay, max_dep, 0, ns.getHostname(), [], [], exclude)
 }
 
-export async function plexer(ns, host, main_file, payload_files, payload_args, delay, max_dep, dep, server_name, visited, exclude) {
+export async function plexer(ns, host, main_file, payload_files, payload_args, delay, max_dep, dep, server_name, visited, execs, exclude) {
     visited.push(server_name);
     const unvisited = ns.scan(server_name).filter(n => !visited.includes(n));
     const args = parsePayloadArgs([payload_args]);
     args['target'] = server_name;
 
     if (!exclude.includes(server_name)) {
-        await needle(ns, host, main_file, payload_files, JSON.stringify(args), 1, delay);
+        execs.push(await needle(ns, host, main_file, payload_files, JSON.stringify(args), 1, delay));
     }
 
     if (unvisited.length == 0 || max_dep == dep) {
-        return;
+        return execs;
     }
 
     for (const server in unvisited) {
-        await plexer(ns, host, main_file, payload_files, payload_args, delay, max_dep, dep + 1, unvisited[server], visited, exclude);
+        execs.concat(await plexer(ns, host, main_file, payload_files, payload_args, delay, max_dep, dep + 1, unvisited[server], visited, execs, exclude));
     }
+
+    return execs;
 }

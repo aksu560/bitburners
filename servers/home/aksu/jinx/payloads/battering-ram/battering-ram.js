@@ -37,5 +37,5 @@ export async function main(ns) {
         ns.getServerRequiredHackingLevel(data.target) <= ns.getHackingLevel()
     )
     ns.nuke(data.target);
-    return 0;
+    return true;
 }

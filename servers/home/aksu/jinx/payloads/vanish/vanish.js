@@ -17,4 +17,5 @@ export async function main(ns) {
         const file = files[i];
         ns.rm(file, target);
     }
+    return true;
 }

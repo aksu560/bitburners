@@ -42,6 +42,5 @@ export async function needle(ns, target, main_file, payload_files, payload_args,
         await ns.sleep(delay);
     }
 
-    ns.exec(main_file, target, threads, payload_args);
-    return 0;
+    return [ns.exec(main_file, target, threads, payload_args), target];
 }
