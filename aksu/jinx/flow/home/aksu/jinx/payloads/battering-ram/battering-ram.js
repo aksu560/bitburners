@@ -31,8 +31,9 @@ async function main(ns) {
     port_count++;
     ns.sqlinject(data.target);
   }
-  if (ns.getServerNumPortsRequired(data.target) <= port_count && ns.getServerRequiredHackingLevel(data.target) <= ns.getHackingLevel())
+  if (ns.getServerNumPortsRequired(data.target) <= port_count) {
     ns.nuke(data.target);
+  }
   return true;
 }
 export {

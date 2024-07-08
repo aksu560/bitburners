@@ -1,16 +1,6 @@
 // servers/home/aksu/jinx/lib.js
 function xsinx(ns) {
-  const foreignServers = bfs(ns).servers.filter((n) => !ns.getPurchasedServers().includes(n));
-  let best_server = "";
-  let best_score = -1;
-  for (const server of foreignServers) {
-    const score = calculate_xsinx(ns, server);
-    if (ns.getServerRequiredHackingLevel(server) < ns.getHackingLevel() * 0.5 && score > best_score) {
-      best_score = score;
-      best_server = server;
-    }
-  }
-  return best_server;
+  return bfs(ns).servers.filter((n) => !ns.getPurchasedServers().includes(n)).filter((x) => ns.getServerRequiredHackingLevel(x) < ns.getHackingLevel() * 0.5).map((x) => [calculate_xsinx(ns, x), x]).reduce((a, b) => a[0] > b[0] ? a : b)[1];
 }
 function calculate_xsinx(ns, host) {
   return ns.getServerMaxMoney(host) / ns.getServerMinSecurityLevel(host);

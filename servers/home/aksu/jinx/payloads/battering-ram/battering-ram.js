@@ -33,9 +33,8 @@ export async function main(ns) {
         ns.sqlinject(data.target);
     }
 
-    if (ns.getServerNumPortsRequired(data.target) <= port_count && 
-        ns.getServerRequiredHackingLevel(data.target) <= ns.getHackingLevel()
-    )
-    ns.nuke(data.target);
+    if (ns.getServerNumPortsRequired(data.target) <= port_count) {
+        ns.nuke(data.target);
+    }
     return true;
 }

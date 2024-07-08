@@ -6,6 +6,11 @@ import { parseConfig } from "./config-parse";
 
 export async function main(ns) {
     
+    return flow(ns);
+
+}
+
+export async function flow(ns) {
     const config = parseConfig(ns);
 
     if (!config) {
@@ -92,7 +97,7 @@ export async function main(ns) {
             let new_ns = ns;
             new_ns.args[0] = file;
 
-            last_exit = await main(new_ns);
+            last_exit = await flow(new_ns);
         }
 
         if (type == "toast") {
@@ -112,5 +117,4 @@ export async function main(ns) {
     }
 
     return variables;
-
 }

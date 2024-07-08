@@ -85,6 +85,9 @@ function parseConfig(ns) {
 
 // servers/home/aksu/jinx/tools/flow/flow.js
 async function main(ns) {
+  return flow(ns);
+}
+async function flow(ns) {
   const config = parseConfig(ns);
   if (!config) {
     return;
@@ -153,7 +156,7 @@ async function main(ns) {
       const file = phase.file;
       let new_ns = ns;
       new_ns.args[0] = file;
-      last_exit = await main(new_ns);
+      last_exit = await flow(new_ns);
     }
     if (type == "toast") {
       const message = phase.message;
@@ -170,5 +173,6 @@ async function main(ns) {
   return variables;
 }
 export {
+  flow,
   main
 };
